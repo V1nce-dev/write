@@ -1,10 +1,14 @@
 import { FastifyInstance } from "fastify";
-import { registerUser, authenticateUser } from "./userController";
-import requireAuth from "../middleware/authMiddleware";
+import {
+  registerUser,
+  authenticateUser,
+  getUserProfile,
+} from "./userController";
+import protect from "../middleware/authMiddleware";
 
 const userRouter = async (fastify: FastifyInstance) => {
   try {
-    fastify.addHook("preHandler", requireAuth);
+    fastify.get("/test", { preHandler: protect }, getUserProfile);
 
     fastify.post(
       "/register",

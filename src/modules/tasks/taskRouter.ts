@@ -6,10 +6,11 @@ import {
   updateTask,
   deleteTask,
 } from "./taskController";
+import protect from "../middleware/authMiddleware";
 
 const taskRouter = async (fastify: FastifyInstance) => {
   try {
-    fastify.get("/", getTasks);
+    fastify.get("/", { preHandler: protect }, getTasks);
 
     fastify.get("/:id", getTaskById);
 

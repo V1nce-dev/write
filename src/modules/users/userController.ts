@@ -9,11 +9,14 @@ import dotenv from "dotenv";
 dotenv.config();
 
 const generateToken = (id: string | null) => {
-  return jwt.sign({ id }, process.env.JWT_SECRET as string, {
-    expiresIn: "30d",
-  });
+  if (id) {
+    return jwt.sign({ id }, process.env.JWT_SECRET as string, {
+      expiresIn: "30d",
+    });
+  } else {
+    throw new Error("Invalid user ID for token generation");
+  }
 };
-
 interface IBody {
   name: string;
   email: string;
@@ -89,4 +92,28 @@ const authenticateUser = async (
   }
 };
 
-export { registerUser, authenticateUser };
+const getUserProfile = async (request: FastifyRequest, reply: FastifyReply) => {
+  try {
+    const userId = request.user?.id; // Assuming the user ID is set in the request by the protect middleware
+
+    if (!userId) {
+      return reply.status(401).send({ error: "Unauthorized" });
+    }
+
+    const userProfile = await db
+      .select()
+      .from(users)
+      .where(eq(users.id, userId));
+
+    if (userProfile.length > 0) {
+      reply.send(userProfile[0]);
+    } else {
+      reply.status(404).send({ error: "User not found" });
+    }
+  } catch (error) {
+    console.error(error);
+    reply.status(500).send({ error: "Internal Server Error" });
+  }
+};
+
+export { registerUser, authenticateUser, getUserProfile };
