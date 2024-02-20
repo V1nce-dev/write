@@ -94,7 +94,7 @@ const authenticateUser = async (
 
 const getUserProfile = async (request: FastifyRequest, reply: FastifyReply) => {
   try {
-    const userId = request.user?.id; // Assuming the user ID is set in the request by the protect middleware
+    const userId = request.user?.id;
 
     if (!userId) {
       return reply.status(401).send({ error: "Unauthorized" });

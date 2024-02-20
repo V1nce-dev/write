@@ -8,10 +8,10 @@ import protect from "../middleware/authMiddleware";
 
 const userRouter = async (fastify: FastifyInstance) => {
   try {
-    fastify.get("/test", { preHandler: protect }, getUserProfile);
+    fastify.get("/api/user", { preHandler: protect }, getUserProfile);
 
     fastify.post(
-      "/register",
+      "/api/register",
       {
         schema: {
           body: {
@@ -28,7 +28,7 @@ const userRouter = async (fastify: FastifyInstance) => {
     );
 
     fastify.post(
-      "/authenticate",
+      "/api/authenticate",
       {
         schema: {
           body: {

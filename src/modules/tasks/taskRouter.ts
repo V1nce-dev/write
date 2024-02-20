@@ -10,12 +10,12 @@ import protect from "../middleware/authMiddleware";
 
 const taskRouter = async (fastify: FastifyInstance) => {
   try {
-    fastify.get("/", { preHandler: protect }, getTasks);
+    fastify.get("/api/", { preHandler: protect }, getTasks);
 
-    fastify.get("/:id", getTaskById);
+    fastify.get("/api/:id", getTaskById);
 
     fastify.post(
-      "/",
+      "/api/post/",
       {
         schema: {
           body: {
@@ -31,7 +31,7 @@ const taskRouter = async (fastify: FastifyInstance) => {
     );
 
     fastify.put(
-      "/:id",
+      "/api/update/:id",
       {
         schema: {
           body: {
@@ -47,7 +47,7 @@ const taskRouter = async (fastify: FastifyInstance) => {
     );
 
     fastify.delete(
-      "/:id",
+      "/api/delete/:id",
       {
         schema: {
           body: {
